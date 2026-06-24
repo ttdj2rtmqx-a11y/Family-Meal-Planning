@@ -1,0 +1,70 @@
+{
+  "family": {
+    "name": "Family",
+    "weeklyBudget": 310,
+    "baselineWeeklySpend": 386,
+    "estimatedOptimizedSpend": 274,
+    "currency": "CAD"
+  },
+  "preferences": {
+    "servings": 4,
+    "goals": ["low cost", "high protein", "school-night friendly"],
+    "avoid": ["shellfish"],
+    "wantedMeals": ["tacos", "pasta", "rice bowls"]
+  },
+  "pantryStaples": [
+    { "name": "Rice", "quantity": "5 lb", "category": "grain", "status": "plenty" },
+    { "name": "Pasta", "quantity": "2 boxes", "category": "grain", "status": "ok" },
+    { "name": "Oats", "quantity": "6 lb", "category": "breakfast", "status": "plenty" },
+    { "name": "Black beans", "quantity": "4 cans", "category": "protein", "status": "ok" },
+    { "name": "Frozen peas", "quantity": "2 bags", "category": "vegetable", "status": "ok" },
+    { "name": "Peanut butter", "quantity": "1 jar", "category": "pantry", "status": "low" },
+    { "name": "Tortillas", "quantity": "8 count", "category": "bread", "status": "low" },
+    { "name": "Soy sauce", "quantity": "1 bottle", "category": "sauce", "status": "plenty" }
+  ],
+  "marketDeals": [
+    { "item": "Chicken thighs", "store": "Costco Kelowna", "brand": "Kirkland Signature", "brandOptions": [{ "brand": "Kirkland Signature", "salePrice": 2.29, "normalPrice": 3.49 }, { "brand": "Lilydale", "salePrice": 2.79, "normalPrice": 3.99 }, { "brand": "Maple Lodge Farms", "salePrice": 3.09, "normalPrice": 4.19 }], "salePrice": 2.29, "normalPrice": 3.49, "unit": "lb", "expires": "Sunday", "tags": ["protein", "bulk"] },
+    { "item": "Ground turkey", "store": "Walmart West Kelowna", "brand": "Maple Leaf Prime", "brandOptions": [{ "brand": "Maple Leaf Prime", "salePrice": 3.19, "normalPrice": 4.49 }, { "brand": "Butterball", "salePrice": 3.39, "normalPrice": 4.59 }, { "brand": "Great Value", "salePrice": 2.98, "normalPrice": 3.98 }], "salePrice": 3.19, "normalPrice": 4.49, "unit": "lb", "expires": "Friday", "tags": ["protein", "quick"] },
+    { "item": "Bell peppers", "store": "Save-On-Foods West Kelowna", "brand": "Western Family", "brandOptions": [{ "brand": "Western Family", "salePrice": 0.89, "normalPrice": 1.39 }, { "brand": "Local BC Produce", "salePrice": 1.09, "normalPrice": 1.49 }, { "brand": "Compliments", "salePrice": 0.99, "normalPrice": 1.45 }], "salePrice": 0.89, "normalPrice": 1.39, "unit": "each", "expires": "Wednesday", "tags": ["produce", "kid friendly"] },
+    { "item": "Greek yogurt", "store": "Walmart West Kelowna", "brand": "Oikos", "brandOptions": [{ "brand": "Oikos", "salePrice": 3.49, "normalPrice": 4.29 }, { "brand": "Great Value", "salePrice": 2.97, "normalPrice": 3.77 }, { "brand": "Olympic", "salePrice": 4.29, "normalPrice": 5.29 }, { "brand": "Liberte", "salePrice": 4.49, "normalPrice": 5.49 }], "salePrice": 3.49, "normalPrice": 4.29, "unit": "tub", "expires": "Saturday", "tags": ["breakfast", "protein"] },
+    { "item": "Cheddar cheese", "store": "Real Canadian Superstore West Kelowna", "brand": "No Name", "brandOptions": [{ "brand": "No Name", "salePrice": 2.99, "normalPrice": 4.19 }, { "brand": "Black Diamond", "salePrice": 4.49, "normalPrice": 5.99 }, { "brand": "Armstrong", "salePrice": 4.29, "normalPrice": 5.79 }, { "brand": "PC", "salePrice": 3.99, "normalPrice": 5.49 }], "salePrice": 2.99, "normalPrice": 4.19, "unit": "block", "expires": "Sunday", "tags": ["dairy", "snack"] },
+    { "item": "Broccoli crowns", "store": "Walmart West Kelowna", "brand": "Fresh Market", "brandOptions": [{ "brand": "Fresh Market", "salePrice": 1.49, "normalPrice": 2.19 }, { "brand": "Local BC Produce", "salePrice": 1.79, "normalPrice": 2.49 }, { "brand": "Great Value", "salePrice": 1.69, "normalPrice": 2.29 }], "salePrice": 1.49, "normalPrice": 2.19, "unit": "lb", "expires": "Thursday", "tags": ["produce", "side"] },
+    { "item": "Marinara sauce", "store": "Real Canadian Superstore West Kelowna", "brand": "No Name", "brandOptions": [{ "brand": "No Name", "salePrice": 1.79, "normalPrice": 2.69 }, { "brand": "Classico", "salePrice": 2.99, "normalPrice": 4.29 }, { "brand": "PC Organics", "salePrice": 3.49, "normalPrice": 4.99 }, { "brand": "Catelli", "salePrice": 2.49, "normalPrice": 3.79 }], "salePrice": 1.79, "normalPrice": 2.69, "unit": "jar", "expires": "Sunday", "tags": ["pantry", "pasta"] }
+  ],
+  "externalRecipeSuggestions": [
+    { "id": "mealdb-52850", "name": "Chicken Couscous", "source": "TheMealDB", "sourceUrl": "https://www.themealdb.com/meal/52850", "imageUrl": "https://www.themealdb.com/images/media/meals/qxytrx1511304021.jpg/medium", "matchedBy": ["chicken", "quick grain bowl", "uses pantry grains"], "marketTieIn": "Useful when chicken is discounted and rice, couscous, or grains are already in the house." },
+    { "id": "mealdb-53011", "name": "Chicken Quinoa Greek Salad", "source": "TheMealDB", "sourceUrl": "https://www.themealdb.com/meal/53011", "imageUrl": "https://www.themealdb.com/images/media/meals/k29viq1585565980.jpg/medium", "matchedBy": ["chicken", "high protein", "lunch prep"], "marketTieIn": "Good bridge meal when chicken and produce deals overlap." },
+    { "id": "mealdb-52993", "name": "Honey Balsamic Chicken with Crispy Broccoli & Potatoes", "source": "TheMealDB", "sourceUrl": "https://www.themealdb.com/meal/52993", "imageUrl": "https://www.themealdb.com/images/media/meals/kvbotn1581012881.jpg/medium", "matchedBy": ["chicken", "broccoli", "family dinner"], "marketTieIn": "Pairs directly with this week's chicken and broccoli deals." },
+    { "id": "mealdb-52818", "name": "Chicken Fajita Mac and Cheese", "source": "TheMealDB", "sourceUrl": "https://www.themealdb.com/meal/52818", "imageUrl": "https://www.themealdb.com/images/media/meals/qrqywr1503066605.jpg/medium", "matchedBy": ["pasta", "chicken", "kid friendly"], "marketTieIn": "A pantry pasta idea when chicken, cheese, or peppers are on sale." }
+  ],
+  "mealOptions": [
+    { "id": "chicken-rice-bowls", "name": "Chicken rice bowls", "type": "dinner", "cost": 13.74, "prepMinutes": 30, "matchScore": 94, "why": "Uses rice and soy sauce already at home, anchors around the best protein deal.", "tags": ["high protein", "leftovers", "deal-led"], "steps": ["Start rice and steam or microwave frozen peas.", "Cook seasoned chicken thighs.", "Steam broccoli and toss with soy sauce.", "Build bowls with rice, chicken, peas, broccoli, and sauce."], "ingredients": [{ "item": "Chicken thighs", "quantity": 3, "unit": "lb", "store": "Costco Kelowna", "price": 6.87, "deal": true }, { "item": "Rice", "quantity": 1.5, "unit": "lb", "store": "Home", "price": 0, "staple": true }, { "item": "Frozen peas", "quantity": 1, "unit": "bag", "store": "Home", "price": 0, "staple": true }, { "item": "Broccoli crowns", "quantity": 2, "unit": "lb", "store": "Walmart West Kelowna", "price": 2.98, "deal": true }, { "item": "Soy sauce", "quantity": 1, "unit": "bottle", "store": "Home", "price": 0, "staple": true }] },
+    { "id": "turkey-taco-night", "name": "Turkey taco night", "type": "dinner", "cost": 12.21, "prepMinutes": 25, "matchScore": 91, "why": "Matches requested tacos and stretches low tortillas with beans from the pantry.", "tags": ["kid friendly", "quick", "requested"], "steps": ["Brown ground turkey.", "Warm beans and sliced peppers.", "Heat tortillas and shred cheddar.", "Serve family-style."], "ingredients": [{ "item": "Ground turkey", "quantity": 2, "unit": "lb", "store": "Walmart West Kelowna", "price": 6.38, "deal": true }, { "item": "Tortillas", "quantity": 1, "unit": "pack", "store": "Walmart West Kelowna", "price": 2.19 }, { "item": "Black beans", "quantity": 2, "unit": "cans", "store": "Home", "price": 0, "staple": true }, { "item": "Cheddar cheese", "quantity": 1, "unit": "block", "store": "Real Canadian Superstore West Kelowna", "price": 2.99, "deal": true }, { "item": "Bell peppers", "quantity": 3, "unit": "each", "store": "Save-On-Foods West Kelowna", "price": 2.67, "deal": true }] },
+    { "id": "pantry-pasta-bake", "name": "Pantry pasta bake", "type": "dinner", "cost": 8.97, "prepMinutes": 35, "matchScore": 88, "why": "Turns pasta already at home into a cheap second-night dinner.", "tags": ["lowest cost", "freezer friendly", "requested"], "steps": ["Boil pasta.", "Mix pasta with marinara, broccoli, and cheese.", "Bake until bubbling.", "Save leftovers."], "ingredients": [{ "item": "Pasta", "quantity": 2, "unit": "boxes", "store": "Home", "price": 0, "staple": true }, { "item": "Marinara sauce", "quantity": 2, "unit": "jars", "store": "Real Canadian Superstore West Kelowna", "price": 3.58, "deal": true }, { "item": "Cheddar cheese", "quantity": 1, "unit": "block", "store": "Real Canadian Superstore West Kelowna", "price": 2.99, "deal": true }, { "item": "Broccoli crowns", "quantity": 1, "unit": "lb", "store": "Walmart West Kelowna", "price": 1.49, "deal": true }] },
+    { "id": "yogurt-oat-breakfasts", "name": "Yogurt oat breakfast prep", "type": "breakfast", "cost": 9.47, "prepMinutes": 15, "matchScore": 85, "why": "Uses oats at home and adds the yogurt deal for five low-cost breakfasts.", "tags": ["breakfast", "make ahead", "high protein"], "steps": ["Portion oats.", "Add Greek yogurt and peanut butter.", "Chill overnight.", "Serve with toppings."], "ingredients": [{ "item": "Oats", "quantity": 2, "unit": "lb", "store": "Home", "price": 0, "staple": true }, { "item": "Greek yogurt", "quantity": 2, "unit": "tubs", "store": "Walmart West Kelowna", "price": 6.98, "deal": true }, { "item": "Peanut butter", "quantity": 1, "unit": "jar", "store": "Walmart West Kelowna", "price": 2.49 }] },
+    { "id": "bean-pepper-quesadillas", "name": "Bean and pepper quesadillas", "type": "dinner", "cost": 10.34, "prepMinutes": 20, "matchScore": 82, "why": "A fast meal that uses pantry beans and the pepper and cheese deals.", "tags": ["quick", "vegetarian", "kid friendly"], "steps": ["Saute bell peppers.", "Warm black beans.", "Fill tortillas with beans, peppers, and cheddar.", "Toast and cut into wedges."], "ingredients": [{ "item": "Black beans", "quantity": 2, "unit": "cans", "store": "Home", "price": 0, "staple": true }, { "item": "Tortillas", "quantity": 1, "unit": "pack", "store": "Walmart West Kelowna", "price": 2.19 }, { "item": "Bell peppers", "quantity": 4, "unit": "each", "store": "Save-On-Foods West Kelowna", "price": 3.56, "deal": true }, { "item": "Cheddar cheese", "quantity": 1, "unit": "block", "store": "Real Canadian Superstore West Kelowna", "price": 2.99, "deal": true }] }
+  ],
+  "weeklyPlan": [
+    { "day": "Mon", "mealId": "chicken-rice-bowls" },
+    { "day": "Tue", "mealId": "turkey-taco-night" },
+    { "day": "Wed", "mealId": "pantry-pasta-bake" },
+    { "day": "Thu", "mealId": "bean-pepper-quesadillas" },
+    { "day": "Fri", "mealId": "yogurt-oat-breakfasts" },
+    { "day": "Sat", "mealId": "chicken-rice-bowls" },
+    { "day": "Sun", "mealId": "pantry-pasta-bake" }
+  ],
+  "stores": [
+    { "name": "Save-On-Foods West Kelowna", "type": "West Kelowna grocer", "x": 33, "y": 58, "basketCost": 76, "savings": 16, "distanceMiles": 2.2, "timeMinutes": 8, "bestFor": ["produce", "bakery", "weekly staples"] },
+    { "name": "Walmart West Kelowna", "type": "West Kelowna supercentre", "x": 50, "y": 45, "basketCost": 68, "savings": 24, "distanceMiles": 3.1, "timeMinutes": 10, "bestFor": ["low prices", "dairy", "pantry basics"] },
+    { "name": "Real Canadian Superstore West Kelowna", "type": "West Kelowna grocer", "x": 62, "y": 64, "basketCost": 72, "savings": 21, "distanceMiles": 3.6, "timeMinutes": 12, "bestFor": ["PC points", "No Name", "family baskets"] },
+    { "name": "Costco Kelowna", "type": "Kelowna bulk", "x": 84, "y": 30, "basketCost": 108, "savings": 31, "distanceMiles": 11.8, "timeMinutes": 24, "bestFor": ["bulk protein", "household", "freezer stock"] }
+  ],
+  "categories": [
+    { "name": "Groceries", "baseline": 188, "optimized": 132, "color": "#2f7d69" },
+    { "name": "Household", "baseline": 64, "optimized": 49, "color": "#df8f35" },
+    { "name": "Kids", "baseline": 53, "optimized": 37, "color": "#5f6fb5" },
+    { "name": "Personal care", "baseline": 34, "optimized": 25, "color": "#bd5470" },
+    { "name": "Prepared food", "baseline": 47, "optimized": 31, "color": "#4f8ca8" }
+  ],
+  "weeklyRoute": ["Home", "Save-On-Foods West Kelowna", "Walmart West Kelowna", "Real Canadian Superstore West Kelowna", "Costco Kelowna", "Home"]
+}
