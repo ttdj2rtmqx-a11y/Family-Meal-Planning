@@ -248,13 +248,11 @@ function App() {
       : [{ name: trimmed, quantity: "on hand", category: "custom", status: "ok" }, ...staples];
     setStaples(nextStaples);
     setNewStaple("");
-    replan(mode, avoid, nextStaples, deals, customRecipes);
   };
 
   const toggleStaple = (name) => {
     const nextStaples = staples.map((item) => (item.name === name ? { ...item, status: item.status === "low" ? "ok" : "low" } : item));
     setStaples(nextStaples);
-    replan(mode, avoid, nextStaples, deals, customRecipes);
   };
 
   const addAvoidValue = (value) => {
