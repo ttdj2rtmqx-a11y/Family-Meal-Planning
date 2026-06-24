@@ -1,0 +1,80 @@
+{
+  "updatedAt": "2026-06-23T20:35:00-07:00",
+  "source": "Daily West Kelowna price refresh placeholder",
+  "note": "Replace this file with vendor API or scraper output during the daily refresh. The dashboard fetches it on load and when Refresh prices is selected.",
+  "deals": [
+    {
+      "item": "Chicken thighs",
+      "store": "Costco Kelowna",
+      "expires": "Sunday",
+      "brandOptions": [
+        { "brand": "Kirkland Signature", "salePrice": 2.29, "normalPrice": 3.49, "availability": "In stock" },
+        { "brand": "Lilydale", "salePrice": 2.79, "normalPrice": 3.99, "availability": "Limited" },
+        { "brand": "Maple Lodge Farms", "salePrice": 3.09, "normalPrice": 4.19, "availability": "In stock" }
+      ]
+    },
+    {
+      "item": "Ground turkey",
+      "store": "Walmart West Kelowna",
+      "expires": "Friday",
+      "brandOptions": [
+        { "brand": "Great Value", "salePrice": 2.98, "normalPrice": 3.98, "availability": "In stock" },
+        { "brand": "Maple Leaf Prime", "salePrice": 3.19, "normalPrice": 4.49, "availability": "In stock" },
+        { "brand": "Butterball", "salePrice": 3.39, "normalPrice": 4.59, "availability": "In stock" }
+      ]
+    },
+    {
+      "item": "Bell peppers",
+      "store": "Save-On-Foods West Kelowna",
+      "expires": "Wednesday",
+      "brandOptions": [
+        { "brand": "Western Family", "salePrice": 0.89, "normalPrice": 1.39, "availability": "In stock" },
+        { "brand": "Compliments", "salePrice": 0.99, "normalPrice": 1.45, "availability": "In stock" },
+        { "brand": "Local BC Produce", "salePrice": 1.09, "normalPrice": 1.49, "availability": "In stock" }
+      ]
+    },
+    {
+      "item": "Greek yogurt",
+      "store": "Walmart West Kelowna",
+      "expires": "Saturday",
+      "brandOptions": [
+        { "brand": "Great Value", "salePrice": 2.97, "normalPrice": 3.77, "availability": "In stock" },
+        { "brand": "Oikos", "salePrice": 3.49, "normalPrice": 4.29, "availability": "In stock" },
+        { "brand": "Olympic", "salePrice": 4.29, "normalPrice": 5.29, "availability": "Limited" },
+        { "brand": "Liberte", "salePrice": 4.49, "normalPrice": 5.49, "availability": "In stock" }
+      ]
+    },
+    {
+      "item": "Cheddar cheese",
+      "store": "Real Canadian Superstore West Kelowna",
+      "expires": "Sunday",
+      "brandOptions": [
+        { "brand": "No Name", "salePrice": 2.99, "normalPrice": 4.19, "availability": "In stock" },
+        { "brand": "PC", "salePrice": 3.99, "normalPrice": 5.49, "availability": "In stock" },
+        { "brand": "Armstrong", "salePrice": 4.29, "normalPrice": 5.79, "availability": "In stock" },
+        { "brand": "Black Diamond", "salePrice": 4.49, "normalPrice": 5.99, "availability": "Limited" }
+      ]
+    },
+    {
+      "item": "Broccoli crowns",
+      "store": "Walmart West Kelowna",
+      "expires": "Thursday",
+      "brandOptions": [
+        { "brand": "Fresh Market", "salePrice": 1.49, "normalPrice": 2.19, "availability": "In stock" },
+        { "brand": "Great Value", "salePrice": 1.69, "normalPrice": 2.29, "availability": "In stock" },
+        { "brand": "Local BC Produce", "salePrice": 1.79, "normalPrice": 2.49, "availability": "In stock" }
+      ]
+    },
+    {
+      "item": "Marinara sauce",
+      "store": "Real Canadian Superstore West Kelowna",
+      "expires": "Sunday",
+      "brandOptions": [
+        { "brand": "No Name", "salePrice": 1.79, "normalPrice": 2.69, "availability": "In stock" },
+        { "brand": "Catelli", "salePrice": 2.49, "normalPrice": 3.79, "availability": "In stock" },
+        { "brand": "Classico", "salePrice": 2.99, "normalPrice": 4.29, "availability": "Limited" },
+        { "brand": "PC Organics", "salePrice": 3.49, "normalPrice": 4.99, "availability": "In stock" }
+      ]
+    }
+  ]
+}
