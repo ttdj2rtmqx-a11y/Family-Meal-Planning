@@ -32,33 +32,14 @@ const textMatches = (a, b) => normalize(a).includes(normalize(b)) || normalize(b
 const formatQty = (value) => (Number.isInteger(value) ? value : Math.round(value * 10) / 10);
 
 const vendorPortals = {
-  "Save-On-Foods West Kelowna": {
-    checkoutUrl: "https://www.saveonfoods.com/",
-    note: "West Kelowna Save-On-Foods entry page",
-  },
-  "Walmart West Kelowna": {
-    checkoutUrl: "https://www.walmart.ca/en/cp/grocery/10019",
-    note: "Walmart Canada grocery entry page",
-  },
-  "Real Canadian Superstore West Kelowna": {
-    checkoutUrl: "https://www.pcexpress.ca/",
-    note: "PC Express grocery entry page",
-  },
-  "Costco Kelowna": {
-    checkoutUrl: "https://www.costco.ca/grocery-household.html",
-    note: "Costco Canada grocery entry page",
-  },
-  Restock: {
-    checkoutUrl: "https://www.saveonfoods.com/",
-    note: "West Kelowna restock fallback",
-  },
+  "Save-On-Foods West Kelowna": { checkoutUrl: "https://www.saveonfoods.com/", note: "West Kelowna Save-On-Foods entry page" },
+  "Walmart West Kelowna": { checkoutUrl: "https://www.walmart.ca/en/cp/grocery/10019", note: "Walmart Canada grocery entry page" },
+  "Real Canadian Superstore West Kelowna": { checkoutUrl: "https://www.pcexpress.ca/", note: "PC Express grocery entry page" },
+  "Costco Kelowna": { checkoutUrl: "https://www.costco.ca/grocery-household.html", note: "Costco Canada grocery entry page" },
+  Restock: { checkoutUrl: "https://www.saveonfoods.com/", note: "West Kelowna restock fallback" },
 };
 
-const getVendorPortal = (store) =>
-  vendorPortals[store] || {
-    checkoutUrl: "https://www.saveonfoods.com/",
-    note: "West Kelowna grocery entry page",
-  };
+const getVendorPortal = (store) => vendorPortals[store] || { checkoutUrl: "https://www.saveonfoods.com/", note: "West Kelowna grocery entry page" };
 
 const getBrandOptions = (deal) =>
   (deal.brandOptions?.length ? deal.brandOptions : [{ brand: deal.brand, salePrice: deal.salePrice, normalPrice: deal.normalPrice }]).map((option) => ({
@@ -73,12 +54,7 @@ const getSelectedOption = (deal) => {
   return options.find((option) => option.brand === (deal.selectedBrand || deal.brand)) || options[0];
 };
 
-const makeDeals = (deals) =>
-  deals.map((deal) => ({
-    ...deal,
-    active: true,
-    selectedBrand: deal.brand || getBrandOptions(deal)[0]?.brand,
-  }));
+const makeDeals = (deals) => deals.map((deal) => ({ ...deal, active: true, selectedBrand: deal.brand || getBrandOptions(deal)[0]?.brand }));
 
 const mergePriceFeed = (deals, feed) =>
   deals.map((deal) => {
@@ -112,11 +88,7 @@ const createLocalPhotoScan = (file) => {
   const seed = Array.from(file.name || "family pantry").reduce((sum, char) => sum + char.charCodeAt(0), file.size || 0);
   const start = seed % photoScanFallbackItems.length;
   const count = Math.min(6, Math.max(4, (seed % 5) + 3));
-  return Array.from({ length: count }, (_, index) => ({
-    ...photoScanFallbackItems[(start + index) % photoScanFallbackItems.length],
-    id: `local-scan-${Date.now()}-${index}`,
-    selected: true,
-  }));
+  return Array.from({ length: count }, (_, index) => ({ ...photoScanFallbackItems[(start + index) % photoScanFallbackItems.length], id: `local-scan-${Date.now()}-${index}`, selected: true }));
 };
 
 const analyzeInventoryPhoto = async (file) => {
@@ -128,27 +100,68 @@ const analyzeInventoryPhoto = async (file) => {
     const result = await response.json();
     const items = Array.isArray(result.items) ? result.items : [];
     if (!items.length) throw new Error("Inventory scan did not return grocery items");
-    return {
-      source: "AI vision scan",
-      items: items.map((item, index) => ({
-        id: `ai-scan-${Date.now()}-${index}`,
-        name: item.name || item.item || "",
-        quantity: item.quantity || "on hand",
-        category: item.category || "photo scan",
-        confidence: Math.round(item.confidence ?? 80),
-        selected: true,
-      })),
-    };
+    return { source: "AI vision scan", items: items.map((item, index) => ({ id: `ai-scan-${Date.now()}-${index}`, name: item.name || item.item || "", quantity: item.quantity || "on hand", category: item.category || "photo scan", confidence: Math.round(item.confidence ?? 80), selected: true })) };
   } catch {
     return { source: "AI-ready local scan", items: createLocalPhotoScan(file) };
   }
 };
 
-const getMealText = (meal) =>
-  normalize([meal.name, meal.why, ...(meal.tags || []), ...(meal.ingredients || []).map((ingredient) => ingredient.item)].join(" "));
+const createLocalRecipeScan = (file) => {
+  const nameHint = (file.name || "family recipe").replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ").trim();
+  const name = nameHint && nameHint.toLowerCase() !== "family recipe" ? nameHint.replace(/\b\w/g, (char) => char.toUpperCase()) : "Scanned Family Skillet";
+  return {
+    id: `recipe-scan-${Date.now()}`,
+    name,
+    type: "photo scan",
+    matchScore: 78,
+    dynamicCost: 18,
+    cost: 18,
+    prepMinutes: 35,
+    why: "Extracted from a recipe photo. Review the ingredients and steps before using it in the meal plan.",
+    tags: ["photo scan", "reviewed recipe"],
+    ingredients: [
+      { item: "Chicken thighs", quantity: 2, unit: "lb", store: "Costco Kelowna", price: 4.58 },
+      { item: "Rice", quantity: 1, unit: "lb", store: "Home", price: 0 },
+      { item: "Carrots", quantity: 1, unit: "bag", store: "Save-On-Foods West Kelowna", price: 2.49 },
+      { item: "Greek yogurt", quantity: 1, unit: "cup", store: "Save-On-Foods West Kelowna", price: 1.35 },
+    ],
+    steps: ["Review the scanned recipe photo and correct ingredients if needed.", "Prep protein, grain, and vegetables.", "Cook until done and adjust seasoning before serving."],
+  };
+};
 
-const getMealAvoidMatches = (meal, avoidList) =>
-  avoidList.filter((item) => item.trim() && getMealText(meal).includes(normalize(item)));
+const analyzeRecipePhoto = async (file) => {
+  const formData = new FormData();
+  formData.append("image", file);
+  try {
+    const response = await fetch("/api/recipe-photo", { method: "POST", body: formData });
+    if (!response.ok) throw new Error(`Recipe scan returned ${response.status}`);
+    const result = await response.json();
+    const ingredients = Array.isArray(result.ingredients) ? result.ingredients : [];
+    const steps = Array.isArray(result.steps) ? result.steps : [];
+    if (!result.name || !ingredients.length) throw new Error("Recipe scan did not return a usable recipe");
+    return {
+      source: "AI recipe scan",
+      recipe: {
+        id: `recipe-scan-${Date.now()}`,
+        name: result.name,
+        type: "photo scan",
+        matchScore: Number.parseInt(result.matchScore, 10) || 78,
+        dynamicCost: Number.parseFloat(result.cost) || 0,
+        cost: Number.parseFloat(result.cost) || 0,
+        prepMinutes: Number.parseInt(result.prepMinutes, 10) || 30,
+        why: "Extracted from a recipe photo and ready to use in the meal plan.",
+        tags: ["photo scan", ...(result.tags || []).slice(0, 3)],
+        ingredients: ingredients.map((ingredient) => ({ item: ingredient.item || ingredient.name || "", quantity: Number.parseFloat(ingredient.quantity) || 1, unit: ingredient.unit || "item", store: ingredient.store || "Save-On-Foods West Kelowna", price: Number.parseFloat(ingredient.price) || 0 })),
+        steps: steps.length ? steps : ["Review recipe photo.", "Prepare ingredients.", "Cook and serve."],
+      },
+    };
+  } catch {
+    return { source: "AI-ready local recipe scan", recipe: createLocalRecipeScan(file) };
+  }
+};
+
+const getMealText = (meal) => normalize([meal.name, meal.why, ...(meal.tags || []), ...(meal.ingredients || []).map((ingredient) => ingredient.item)].join(" "));
+const getMealAvoidMatches = (meal, avoidList) => avoidList.filter((item) => item.trim() && getMealText(meal).includes(normalize(item)));
 
 const scoreMeals = (meals, staples, deals, avoidList, mode) =>
   meals
@@ -180,17 +193,12 @@ const makeSelections = (rankedMeals, avoidList, mode) => {
   return Object.fromEntries(plan.weeklyPlan.map((slot, index) => [slot.day, rotation[index % rotation.length]?.id || rankedMeals[0]?.id]));
 };
 
-const parseIngredientLines = (value) =>
-  value
-    .split("\n")
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .map((line) => {
-      const [item, quantity = "1", unit = "item", store = "Save-On-Foods West Kelowna", price = "0"] = line.split(",").map((part) => part.trim());
-      return { item, quantity: Number.parseFloat(quantity) || 1, unit, store, price: Number.parseFloat(price) || 0 };
-    });
-
+const parseIngredientLines = (value) => value.split("\n").map((line) => line.trim()).filter(Boolean).map((line) => {
+  const [item, quantity = "1", unit = "item", store = "Save-On-Foods West Kelowna", price = "0"] = line.split(",").map((part) => part.trim());
+  return { item, quantity: Number.parseFloat(quantity) || 1, unit, store, price: Number.parseFloat(price) || 0 };
+});
 const parseStepLines = (value) => value.split("\n").map((line) => line.trim()).filter(Boolean);
+const ingredientLines = (ingredients = []) => ingredients.map((ingredient) => [ingredient.item, ingredient.quantity, ingredient.unit, ingredient.store || "Save-On-Foods West Kelowna", ingredient.price || 0].join(", ")).join("\n");
 
 function App() {
   const [mode, setMode] = useState("balanced");
@@ -209,15 +217,15 @@ function App() {
   const [detectedItems, setDetectedItems] = useState([]);
   const [scanStatus, setScanStatus] = useState("Take a fridge or pantry photo, then review the detected groceries before adding them.");
   const [isScanning, setIsScanning] = useState(false);
+  const [recipePhotoFile, setRecipePhotoFile] = useState(null);
+  const [recipePreviewUrl, setRecipePreviewUrl] = useState("");
+  const [scannedRecipe, setScannedRecipe] = useState(null);
+  const [recipeScanStatus, setRecipeScanStatus] = useState("Take or upload a recipe photo, then review the extracted recipe before saving it.");
+  const [isRecipeScanning, setIsRecipeScanning] = useState(false);
 
   const mealPool = useMemo(() => [...customRecipes, ...plan.mealOptions], [customRecipes]);
-
-  const buildScores = (nextMode = mode, nextAvoid = avoid, nextStaples = staples, nextDeals = deals, nextCustom = customRecipes) =>
-    scoreMeals([...nextCustom, ...plan.mealOptions], nextStaples, nextDeals, nextAvoid, nextMode);
-
-  const replan = (nextMode = mode, nextAvoid = avoid, nextStaples = staples, nextDeals = deals, nextCustom = customRecipes) => {
-    setSelectedMeals(makeSelections(buildScores(nextMode, nextAvoid, nextStaples, nextDeals, nextCustom), nextAvoid, nextMode));
-  };
+  const buildScores = (nextMode = mode, nextAvoid = avoid, nextStaples = staples, nextDeals = deals, nextCustom = customRecipes) => scoreMeals([...nextCustom, ...plan.mealOptions], nextStaples, nextDeals, nextAvoid, nextMode);
+  const replan = (nextMode = mode, nextAvoid = avoid, nextStaples = staples, nextDeals = deals, nextCustom = customRecipes) => setSelectedMeals(makeSelections(buildScores(nextMode, nextAvoid, nextStaples, nextDeals, nextCustom), nextAvoid, nextMode));
 
   const refreshPrices = async () => {
     setStatus("Refreshing brand prices...");
@@ -233,32 +241,28 @@ function App() {
   };
 
   useEffect(() => { refreshPrices(); }, []);
-
   useEffect(() => {
-    if (!photoFile) {
-      setPreviewUrl("");
-      return undefined;
-    }
+    if (!photoFile) { setPreviewUrl(""); return undefined; }
     const nextPreviewUrl = URL.createObjectURL(photoFile);
     setPreviewUrl(nextPreviewUrl);
     return () => URL.revokeObjectURL(nextPreviewUrl);
   }, [photoFile]);
+  useEffect(() => {
+    if (!recipePhotoFile) { setRecipePreviewUrl(""); return undefined; }
+    const nextPreviewUrl = URL.createObjectURL(recipePhotoFile);
+    setRecipePreviewUrl(nextPreviewUrl);
+    return () => URL.revokeObjectURL(nextPreviewUrl);
+  }, [recipePhotoFile]);
 
   const mealScores = useMemo(() => scoreMeals(mealPool, staples, deals, avoid, mode), [avoid, deals, mealPool, mode, staples]);
-
-  const selectedMealObjects = plan.weeklyPlan
-    .map((slot) => mealScores.find((meal) => meal.id === selectedMeals[slot.day]) || mealScores[0])
-    .filter(Boolean);
+  const selectedMealObjects = plan.weeklyPlan.map((slot) => mealScores.find((meal) => meal.id === selectedMeals[slot.day]) || mealScores[0]).filter(Boolean);
 
   const shopping = useMemo(() => {
     const byStore = {};
     const plain = {};
     const covered = [];
     selectedMealObjects.flatMap((meal) => meal.ingredients).forEach((ingredient) => {
-      if (findStaple(ingredient.item, staples)) {
-        covered.push(ingredient.item);
-        return;
-      }
+      if (findStaple(ingredient.item, staples)) { covered.push(ingredient.item); return; }
       const deal = findDeal(ingredient.item, deals);
       const option = deal ? getSelectedOption(deal) : null;
       const store = deal?.store || ingredient.store || "Restock";
@@ -286,39 +290,20 @@ function App() {
     return [...new Set([...planned, ...market, ...common])].filter((item) => !avoid.some((avoidItem) => normalize(avoidItem) === normalize(item))).slice(0, 12);
   }, [avoid, deals, selectedMealObjects]);
 
-  const applyMode = (nextMode) => {
-    setMode(nextMode);
-    replan(nextMode, avoid, staples, deals, customRecipes);
-  };
-
+  const applyMode = (nextMode) => { setMode(nextMode); replan(nextMode, avoid, staples, deals, customRecipes); };
   const addStaple = (event) => {
     event.preventDefault();
     const trimmed = newStaple.trim();
     if (!trimmed) return;
-    const nextStaples = staples.some((staple) => textMatches(staple.name, trimmed))
-      ? staples.map((staple) => (textMatches(staple.name, trimmed) ? { ...staple, status: "ok", quantity: staple.quantity || "on hand" } : staple))
-      : [{ name: trimmed, quantity: "on hand", category: "custom", status: "ok" }, ...staples];
+    const nextStaples = staples.some((staple) => textMatches(staple.name, trimmed)) ? staples.map((staple) => (textMatches(staple.name, trimmed) ? { ...staple, status: "ok", quantity: staple.quantity || "on hand" } : staple)) : [{ name: trimmed, quantity: "on hand", category: "custom", status: "ok" }, ...staples];
     setStaples(nextStaples);
     setNewStaple("");
   };
+  const toggleStaple = (name) => setStaples(staples.map((item) => (item.name === name ? { ...item, status: item.status === "low" ? "ok" : "low" } : item)));
 
-  const toggleStaple = (name) => {
-    setStaples(staples.map((item) => (item.name === name ? { ...item, status: item.status === "low" ? "ok" : "low" } : item)));
-  };
-
-  const choosePhoto = (event) => {
-    const nextFile = event.target.files?.[0];
-    if (!nextFile) return;
-    setPhotoFile(nextFile);
-    setDetectedItems([]);
-    setScanStatus("Photo loaded. Run the scan, then confirm the groceries that are actually on hand.");
-  };
-
+  const choosePhoto = (event) => { const nextFile = event.target.files?.[0]; if (!nextFile) return; setPhotoFile(nextFile); setDetectedItems([]); setScanStatus("Photo loaded. Run the scan, then confirm the groceries that are actually on hand."); };
   const scanPhoto = async () => {
-    if (!photoFile) {
-      setScanStatus("Add a fridge or pantry photo first.");
-      return;
-    }
+    if (!photoFile) { setScanStatus("Add a fridge or pantry photo first."); return; }
     setIsScanning(true);
     setScanStatus("Scanning photo for recognizable groceries...");
     const scan = await analyzeInventoryPhoto(photoFile);
@@ -326,56 +311,50 @@ function App() {
     setScanStatus(scan.source === "AI vision scan" ? "AI scan complete. Review and edit before updating house staples." : "Static-site fallback scan complete. Connect /api/fridge-inventory for true AI vision.");
     setIsScanning(false);
   };
-
-  const updateDetectedItem = (id, updates) => {
-    setDetectedItems((current) => current.map((item) => (item.id === id ? { ...item, ...updates } : item)));
-  };
-
+  const updateDetectedItem = (id, updates) => setDetectedItems((current) => current.map((item) => (item.id === id ? { ...item, ...updates } : item)));
   const addDetectedStaples = () => {
-    const selected = detectedItems
-      .filter((item) => item.selected && item.name.trim())
-      .map((item) => ({ ...item, name: item.name.trim(), quantity: String(item.quantity || "").trim() || "on hand" }));
-    if (!selected.length) {
-      setScanStatus("Select at least one detected grocery before adding to staples.");
-      return;
-    }
-    let added = 0;
-    let updated = 0;
-    const nextStaples = [...staples];
+    const selected = detectedItems.filter((item) => item.selected && item.name.trim()).map((item) => ({ ...item, name: item.name.trim(), quantity: String(item.quantity || "").trim() || "on hand" }));
+    if (!selected.length) { setScanStatus("Select at least one detected grocery before adding to staples."); return; }
+    let added = 0; let updated = 0; const nextStaples = [...staples];
     selected.forEach((item) => {
       const existingIndex = nextStaples.findIndex((staple) => normalize(staple.name) === normalize(item.name));
-      if (existingIndex >= 0) {
-        nextStaples[existingIndex] = { ...nextStaples[existingIndex], quantity: item.quantity, category: item.category || nextStaples[existingIndex].category, status: "ok" };
-        updated += 1;
-        return;
-      }
-      nextStaples.unshift({ name: item.name, quantity: item.quantity, category: item.category || "photo scan", status: "ok" });
-      added += 1;
+      if (existingIndex >= 0) { nextStaples[existingIndex] = { ...nextStaples[existingIndex], quantity: item.quantity, category: item.category || nextStaples[existingIndex].category, status: "ok" }; updated += 1; return; }
+      nextStaples.unshift({ name: item.name, quantity: item.quantity, category: item.category || "photo scan", status: "ok" }); added += 1;
     });
     setStaples(nextStaples);
     setScanStatus(`${added} new and ${updated} existing staples updated. Meal plan, shopping list, and carts recalculated.`);
+  };
+
+  const chooseRecipePhoto = (event) => { const nextFile = event.target.files?.[0]; if (!nextFile) return; setRecipePhotoFile(nextFile); setScannedRecipe(null); setRecipeScanStatus("Recipe photo loaded. Run extraction, then correct anything the scan missed."); };
+  const scanRecipePhoto = async () => {
+    if (!recipePhotoFile) { setRecipeScanStatus("Add a recipe photo first."); return; }
+    setIsRecipeScanning(true);
+    setRecipeScanStatus("Extracting recipe title, ingredients, and steps...");
+    const scan = await analyzeRecipePhoto(recipePhotoFile);
+    setScannedRecipe(scan.recipe);
+    setRecipeScanStatus(scan.source === "AI recipe scan" ? "AI recipe extraction complete. Review before saving to recipe inventory." : "Static-site fallback extraction complete. Connect /api/recipe-photo for true AI recipe OCR.");
+    setIsRecipeScanning(false);
+  };
+  const updateScannedRecipeField = (field, value) => setScannedRecipe((current) => ({ ...current, [field]: value }));
+  const updateScannedRecipeList = (field, value) => setScannedRecipe((current) => ({ ...current, [field]: field === "ingredients" ? parseIngredientLines(value) : parseStepLines(value) }));
+  const addScannedRecipe = () => {
+    if (!scannedRecipe?.name?.trim() || !scannedRecipe.ingredients?.length) { setRecipeScanStatus("The extracted recipe needs a name and at least one ingredient."); return; }
+    const recipe = { ...scannedRecipe, id: scannedRecipe.id || `recipe-scan-${Date.now()}`, name: scannedRecipe.name.trim(), cost: Number.parseFloat(scannedRecipe.cost) || 0, dynamicCost: Number.parseFloat(scannedRecipe.cost) || 0, prepMinutes: Number.parseInt(scannedRecipe.prepMinutes, 10) || 30, ingredients: scannedRecipe.ingredients.filter((ingredient) => ingredient.item?.trim()), steps: scannedRecipe.steps?.length ? scannedRecipe.steps : ["Review recipe photo.", "Cook and serve."] };
+    const nextCustom = [recipe, ...customRecipes];
+    setCustomRecipes(nextCustom);
+    setSelectedMeals((current) => ({ ...current, [plan.weeklyPlan[0].day]: recipe.id }));
+    setRecipeMessage(`${recipe.name} was added from a photo and placed into Monday.`);
+    setRecipeScanStatus(`${recipe.name} was added to the recipe inventory and shopping lists recalculated.`);
   };
 
   const addAvoidValue = (value) => {
     const trimmed = value.trim();
     if (!trimmed || avoid.some((item) => normalize(item) === normalize(trimmed))) return;
     const nextAvoid = [...avoid, trimmed];
-    setAvoid(nextAvoid);
-    setNewAvoid("");
-    replan(mode, nextAvoid, staples, deals, customRecipes);
+    setAvoid(nextAvoid); setNewAvoid(""); replan(mode, nextAvoid, staples, deals, customRecipes);
   };
-
-  const addAvoid = (event) => {
-    event.preventDefault();
-    addAvoidValue(newAvoid);
-  };
-
-  const removeAvoid = (item) => {
-    const nextAvoid = avoid.filter((avoidItem) => avoidItem !== item);
-    setAvoid(nextAvoid);
-    replan(mode, nextAvoid, staples, deals, customRecipes);
-  };
-
+  const addAvoid = (event) => { event.preventDefault(); addAvoidValue(newAvoid); };
+  const removeAvoid = (item) => { const nextAvoid = avoid.filter((avoidItem) => avoidItem !== item); setAvoid(nextAvoid); replan(mode, nextAvoid, staples, deals, customRecipes); };
   const updateRecipeDraft = (field, value) => setRecipeDraft((current) => ({ ...current, [field]: value }));
 
   const addRecipe = (event) => {
@@ -383,25 +362,16 @@ function App() {
     if (!recipeDraft.name.trim() || !recipeDraft.ingredients.trim()) return;
     const ingredients = parseIngredientLines(recipeDraft.ingredients);
     const estimatedCost = Number.parseFloat(recipeDraft.cost) || ingredients.reduce((sum, ingredient) => sum + ingredient.price * ingredient.quantity, 0);
-    const recipe = {
-      id: `custom-${Date.now()}`,
-      name: recipeDraft.name.trim(),
-      type: "custom",
-      matchScore: 82,
-      dynamicCost: estimatedCost,
-      cost: estimatedCost,
-      prepMinutes: Number.parseInt(recipeDraft.prepMinutes, 10) || 30,
-      why: "Manually entered family recipe. It is now placed into Monday and reflected in the cart and shopping list.",
-      tags: ["manual", "family recipe"],
-      ingredients,
-      steps: parseStepLines(recipeDraft.steps).length ? parseStepLines(recipeDraft.steps) : ["Prep ingredients.", "Cook using your family method.", "Serve and save notes for next time."],
-    };
+    const recipe = { id: `custom-${Date.now()}`, name: recipeDraft.name.trim(), type: "custom", matchScore: 82, dynamicCost: estimatedCost, cost: estimatedCost, prepMinutes: Number.parseInt(recipeDraft.prepMinutes, 10) || 30, why: "Manually entered family recipe. It is now placed into Monday and reflected in the cart and shopping list.", tags: ["manual", "family recipe"], ingredients, steps: parseStepLines(recipeDraft.steps).length ? parseStepLines(recipeDraft.steps) : ["Prep ingredients.", "Cook using your family method.", "Serve and save notes for next time."] };
     const nextCustom = [recipe, ...customRecipes];
     setCustomRecipes(nextCustom);
     setSelectedMeals((current) => ({ ...current, [plan.weeklyPlan[0].day]: recipe.id }));
     setRecipeDraft({ name: "", prepMinutes: "", cost: "", ingredients: "", steps: "" });
     setRecipeMessage(`${recipe.name} was added to Monday and the shopping list was updated.`);
   };
+
+  const scannedIngredientText = ingredientLines(scannedRecipe?.ingredients || []);
+  const scannedStepText = scannedRecipe?.steps?.join("\n") || "";
 
   return (
     <main>
@@ -427,6 +397,8 @@ function App() {
         <section className="panel wide"><h2><ChefHat /> 7-day meal plan</h2><div className="meal-grid">{plan.weeklyPlan.map((slot) => { const meal = mealScores.find((item) => item.id === selectedMeals[slot.day]) || mealScores[0]; const conflicts = getMealAvoidMatches(meal, avoid); return <article className={`meal ${conflicts.length ? "has-conflict" : ""}`} key={slot.day}><span>{slot.day}</span><select value={meal.id} aria-label={`${slot.day} meal`} onChange={(e) => setSelectedMeals((current) => ({ ...current, [slot.day]: e.target.value }))}>{mealScores.map((option) => <option key={option.id} value={option.id}>{option.name} · {option.score}% · {money(option.dynamicCost)}</option>)}</select><p>{meal.why}</p>{conflicts.length > 0 && <small className="conflict-note">Avoid conflict: {conflicts.join(", ")}</small>}<details><summary>Recipe</summary><div className="recipe-columns"><div><strong>Ingredients</strong><ul>{meal.ingredients.map((ingredient) => <li key={`${meal.id}-${ingredient.item}`}>{formatQty(ingredient.quantity)} {ingredient.unit} {ingredient.item}</li>)}</ul></div><div><strong>Steps</strong><ol>{meal.steps.map((step) => <li key={step}>{step}</li>)}</ol></div></div></details></article>; })}</div></section>
 
         <section className="panel wide"><h2><ClipboardList /> Manual recipe input</h2><form className="recipe-form" onSubmit={addRecipe}><div className="form-row"><input aria-label="Recipe name" placeholder="Recipe name" value={recipeDraft.name} onChange={(e) => updateRecipeDraft("name", e.target.value)} /><input aria-label="Prep minutes" placeholder="Minutes" inputMode="numeric" value={recipeDraft.prepMinutes} onChange={(e) => updateRecipeDraft("prepMinutes", e.target.value)} /><input aria-label="Estimated recipe cost" placeholder="Cost" inputMode="decimal" value={recipeDraft.cost} onChange={(e) => updateRecipeDraft("cost", e.target.value)} /></div><textarea aria-label="Recipe ingredients" placeholder={"Ingredients, one per line:\nChicken thighs, 2, lb, Costco Kelowna, 4.58\nRice, 1, lb, Home, 0"} value={recipeDraft.ingredients} onChange={(e) => updateRecipeDraft("ingredients", e.target.value)} /><textarea aria-label="Recipe steps" placeholder={"Steps, one per line:\nCook rice.\nSeason and roast chicken.\nServe with vegetables."} value={recipeDraft.steps} onChange={(e) => updateRecipeDraft("steps", e.target.value)} /><button type="submit"><Plus size={16} /> Add recipe</button></form>{recipeMessage && <p className="recipe-message">{recipeMessage}</p>}</section>
+
+        <section className="panel wide"><h2><Camera /> Recipe photo import</h2><div className="photo-scan-layout"><label className="photo-dropzone"><input accept="image/*" aria-label="Take or upload recipe photo" capture="environment" onChange={chooseRecipePhoto} type="file" />{recipePreviewUrl ? <img alt="Selected recipe" src={recipePreviewUrl} /> : <span><ImagePlus size={28} /> Take or upload a recipe</span>}</label><div className="photo-scan-actions"><p>{recipeScanStatus}</p><button disabled={!recipePhotoFile || isRecipeScanning} onClick={scanRecipePhoto} type="button"><ScanLine size={16} /> {isRecipeScanning ? "Extracting..." : "Extract recipe"}</button><button disabled={!scannedRecipe} onClick={addScannedRecipe} type="button"><Plus size={16} /> Add to recipe inventory</button></div></div>{scannedRecipe && <div className="recipe-scan-editor"><div className="form-row"><input aria-label="Extracted recipe name" value={scannedRecipe.name} onChange={(e) => updateScannedRecipeField("name", e.target.value)} /><input aria-label="Extracted prep minutes" inputMode="numeric" value={scannedRecipe.prepMinutes} onChange={(e) => updateScannedRecipeField("prepMinutes", e.target.value)} /><input aria-label="Extracted recipe cost" inputMode="decimal" value={scannedRecipe.cost} onChange={(e) => updateScannedRecipeField("cost", e.target.value)} /></div><textarea aria-label="Extracted recipe ingredients" value={scannedIngredientText} onChange={(e) => updateScannedRecipeList("ingredients", e.target.value)} /><textarea aria-label="Extracted recipe steps" value={scannedStepText} onChange={(e) => updateScannedRecipeList("steps", e.target.value)} /></div>}</section>
 
         <section className="panel wide"><h2><ShoppingBasket /> Online cart builder</h2><p className="shopping-note">Built from the active meal plan and pantry. Open vendor entry pages to finish checkout; no blocked deep-search links.</p><div className="store-grid">{Object.entries(shopping.stores).map(([store, items]) => { const portal = getVendorPortal(store); const total = items.reduce((sum, item) => sum + item.price, 0); return <article className="store" key={store}><div className="store-top"><div><strong>{store}</strong><small>{portal.note}</small></div><b>{money(total)}</b></div>{items.map((item) => <div className="line" key={`${store}-${item.item}-${item.brand}`}><span>{item.item}<small>{item.brand} · {formatQty(item.quantity)} {item.unit}</small></span><b>{money(item.price)}</b></div>)}<a className="store-link" href={portal.checkoutUrl} target="_blank" rel="noreferrer"><ExternalLink size={16} /> Open store</a></article>; })}</div></section>
 
