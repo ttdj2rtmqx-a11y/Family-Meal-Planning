@@ -121,6 +121,7 @@ select { appearance: none; background-image: linear-gradient(45deg, transparent 
 .detected-item button { background: #e6f3ec; border-color: #cce2d4; color: #315c4d; font-weight: 900; height: 34px; min-height: 34px; padding: 0; width: 34px; }
 .detected-item input { min-height: 38px; padding: 0 9px; }
 .detected-item span, .detected-item em { background: #eef2ee; border-radius: 999px; color: #53615d; font-size: .76rem; font-style: normal; font-weight: 900; padding: 7px 9px; white-space: nowrap; }
+.recipe-scan-editor { display: grid; gap: 10px; margin-top: 14px; }
 .note, .shopping-note, .recipe-message, .covered { background: #eef7f1; border: 1px solid #d6e8dc; border-radius: 8px; color: #40504b; line-height: 1.45; margin: 0 0 12px; padding: 12px 14px; }
 .recipe-message { color: #255b4b; font-weight: 900; margin: 12px 0 0; }
 .refresh { margin-bottom: 12px; }
